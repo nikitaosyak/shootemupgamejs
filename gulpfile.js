@@ -40,10 +40,11 @@ gulp.task('pack', () => {
         devtool: 'source-map'
     }
 
-    return gulp.src('src/**/*.js').pipe(stream(config, webpack)).pipe(gulp.dest('./build'))
+    return gulp.src('src/js/**/*.js').pipe(stream(config, webpack)).pipe(gulp.dest('./build'))
 })
 
 gulp.task('deploy-static', ['clean'], () => {
+    gulp.src(['./src/lib/*.js']).pipe(gulp.dest('./build'))
     gulp.src(['./src/index.html']).pipe(gulp.dest('./build'))
 })
 
