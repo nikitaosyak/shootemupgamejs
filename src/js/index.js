@@ -1,30 +1,37 @@
-import {someFunction} from './test'
+import {Renderer} from "./Renderer";
+import {Resources} from "./util/Resources";
+import {Input} from "./Input";
 
 window.onload = () => {
+
+    const resources = window.resources = Resources()
 
     const canvas = document.createElement('canvas')
     document.body.appendChild(canvas)
 
-    const stage = new PIXI.Container();
+    const renderer = Renderer(canvas)
 
-    const renderer = PIXI.autoDetectRenderer({
-        roundPixels: true,
-        backgroundColor: 0x817066,
-        width: 300,
-        height: 300,
-        view: canvas
-    })
+    const startGame = () => {
 
-    const graphics = new PIXI.Graphics()
-    stage.addChild(graphics)
-    graphics.beginFill(0xcc0000)
-    graphics.drawCircle(100, 100, 50)
-    graphics.endFill()
+        const input = new Input()
 
-    const gameLoop = () => {
-        renderer.render(stage)
+        const spaceship = new PIXI.Sprite(resources.getTexture('spaceship'))
+        renderer.addObject(spaceship)
 
-        requestAnimationFrame(gameLoop)
+        input.on('accelerate', (direction) => {
+            spaceship.x += direction * 10
+        })
+
+        const gameLoop = () => {
+            renderer.update()
+            requestAnimationFrame(gameLoop)
+        }
+        gameLoop()
     }
-    gameLoop()
+
+    resources
+        .add('spaceship', 'assets/spaceship_mockup.png')
+        .load(() => {
+            startGame()
+        })
 }
