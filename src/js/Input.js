@@ -5,15 +5,27 @@ export const Input = (canvasElement) => {
     const self = {}
     Object.assign(self, emitterBehaviour(eventDictionary))
 
-    window.onkeypress = (e) => {
-        if (e.keyCode === 97) { // left
-            self.emit('accelerate', -1)
+    window.onkeydown = (e) => {
+        if (e.key === 'a') { // left
+            self.emit('accelerate', {x: -1, y: 0})
         }
-        if (e.keyCode === 100) { // right
-            self.emit('accelerate', 1)
+        if (e.key === 'd') { // right
+            self.emit('accelerate', {x: 1, y: 0})
         }
-        if (e.keyCode === 32) { // shoot
-            self.emit('shoot')
+        if (e.key === 'w') { // toward
+            self.emit('accelerate', {y: -1, x: 0})
+        }
+        if (e.key === 's') { // backward
+            self.emit('accelerate', {y: 1, x: 0})
+        }
+    }
+
+    window.onkeyup = (e) => {
+        if (e.key === 'w') { // toward
+            self.emit('accelerate', {y: 0, x: 0})
+        }
+        if (e.key === 's') { // backward
+            self.emit('accelerate', {y: 0, x: 0})
         }
     }
 

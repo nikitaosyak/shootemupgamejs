@@ -36,10 +36,10 @@ export const LevelSpawner = () => {
 
             if (toRoll.length === 0) return
 
-            console.log('Time to spawn! selecting from: ', toRoll)
+            // console.log('Time to spawn! selecting from: ', toRoll)
             const toSpawn = toRoll[Util.getRandomInt(0, toRoll.length-1)]
 
-            console.log('Spawned type: ', toSpawn)
+            // console.log('Spawned type: ', toSpawn)
             lastSpawn = lastTypedSpawn[toSpawn] = now
 
             canSpawn = true
