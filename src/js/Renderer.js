@@ -1,9 +1,21 @@
 
+export const RENDERER_LAYER = {BACKGROUND: 'background', PLAYER: 'player'}
+
 export const Renderer = (canvasElement) => {
 
     const virtualSize = {x: 800, y: 1280}
 
     const stage = new PIXI.Container()
+    const backgroundLayer = new PIXI.Container()
+    const playerLayer = new PIXI.Container()
+
+    stage.addChild(backgroundLayer)
+    stage.addChild(playerLayer)
+
+    const layerMapping = {}
+    layerMapping[RENDERER_LAYER.BACKGROUND] = backgroundLayer
+    layerMapping[RENDERER_LAYER.PLAYER] = playerLayer
+
     const pixiRenderer = PIXI.autoDetectRenderer({
         width: virtualSize.x,
         height: virtualSize.y,
@@ -29,11 +41,11 @@ export const Renderer = (canvasElement) => {
 
     return {
         get size() { return virtualSize },
-        addObject: (displayObject) => {
-            stage.addChild(displayObject)
+        addObject: (displayObject, layer) => {
+            layerMapping[layer].addChild(displayObject)
         },
-        removeObject: () => {
-
+        removeObject: (displayObject, layer) => {
+            layerMapping[layer].removeChild(displayObject)
         },
         update: () => {
             pixiRenderer.render(stage)

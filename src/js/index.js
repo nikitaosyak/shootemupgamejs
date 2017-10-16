@@ -1,7 +1,8 @@
-import {Renderer} from "./Renderer";
+import {Renderer, RENDERER_LAYER} from "./Renderer";
 import {Resources} from "./util/Resources";
 import {Input} from "./Input";
 import {LevelSpawner} from "./LevelSpawner";
+import {Simulation} from "./Simulation";
 
 window.onload = () => {
 
@@ -14,30 +15,28 @@ window.onload = () => {
 
     const renderer = Renderer(canvas)
     const spawner = LevelSpawner()
+    const input = new Input()
+    const simulation = Simulation(renderer, spawner, input)
 
     const startGame = () => {
 
-        const input = new Input()
-
         const spaceship = new PIXI.Sprite(resources.getTexture('spaceship'))
-        spaceship.width = spaceship.height = 128
+        spaceship.width = spaceship.height = 256
         spaceship.anchor.x = spaceship.anchor.y = 0.5
         spaceship.x = renderer.size.x/2
         spaceship.y = renderer.size.y - spaceship.height/2
-        renderer.addObject(spaceship)
+        renderer.addObject(spaceship, RENDERER_LAYER.PLAYER)
 
         input.on('accelerate', (direction) => {
             spaceship.x += direction * 10
         })
 
         const gameLoop = () => {
-            spawner.update()
-            if (spawner.canSpawn) {
-                //
-                renderer.addObject(spawner.spawn())
-            }
+
+            simulation.update()
 
             renderer.update()
+
             requestAnimationFrame(gameLoop)
         }
         gameLoop()
