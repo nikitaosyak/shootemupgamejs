@@ -17,16 +17,18 @@ export const Renderer = (canvasElement) => {
         currentCanvasSize.x = window.innerWidth
         currentCanvasSize.y = window.innerHeight
 
-        pixiRenderer.resize(virtualSize.x * (currentCanvasSize.x / virtualSize.y), currentCanvasSize.y)
+        const widthMultiplier = currentCanvasSize.y / virtualSize.y
+        pixiRenderer.resize(Math.round(virtualSize.x * widthMultiplier), currentCanvasSize.y)
 
         const horizontalMargin = (currentCanvasSize.x - pixiRenderer.width) / 2
-        canvasElement.style.marginLeft = horizontalMargin.toString() + 'px'
+        canvasElement.style.marginLeft = Math.round(horizontalMargin).toString() + 'px'
 
         stage.scale.x = pixiRenderer.width / virtualSize.x
         stage.scale.y = pixiRenderer.height / virtualSize.y
     }
 
     return {
+        get size() { return virtualSize },
         addObject: (displayObject) => {
             stage.addChild(displayObject)
         },
