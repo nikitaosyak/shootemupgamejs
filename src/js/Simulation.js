@@ -1,11 +1,16 @@
 import {RENDERER_LAYER} from "./Renderer";
+import {SPAWN_TYPE} from "./LevelSpawner";
 export const Simulation = (renderer, spawner, input) => {
 
     const SPACESHIP_SPEED = 200
     const BACKGROUND_OBJECT_SPEED = 100
     const PARALLAX_SPEED = 25
 
-    const backgroundObjects = []
+    const objects = []
+    const spawnTypeMapping = {}
+    spawnTypeMapping[SPAWN_TYPE.BACKGROUND] = {renderLayer: RENDERER_LAYER.BACKGROUND}
+    spawnTypeMapping[SPAWN_TYPE.DEBRIS] = {renderLayer: RENDERER_LAYER.DEBRIS}
+    spawnTypeMapping[SPAWN_TYPE.AI] = {renderLayer: RENDERER_LAYER.BACKGROUND}
 
     const spaceship = new PIXI.Sprite(resources.getTexture('spaceship'))
     spaceship.width = spaceship.height = 256
@@ -52,22 +57,31 @@ export const Simulation = (renderer, spawner, input) => {
             spawner.update()
             if (spawner.canSpawn) {
                 const newObject = spawner.spawn()
-                backgroundObjects.push(newObject)
-                renderer.addObject(newObject, RENDERER_LAYER.BACKGROUND)
+                objects.push({obj: newObject, type: spawner.spawnType})
+                renderer.addObject(newObject, spawnTypeMapping[spawner.spawnType].renderLayer)
             }
 
             const toDestroy = []
-            backgroundObjects.forEach(object => {
-                object.y += BACKGROUND_OBJECT_SPEED * dt - (parallaxMultiplier * PARALLAX_SPEED * dt)
-                if (object.y > renderer.size.y + object.height/2) {
-                    toDestroy.push(object)
+            objects.forEach(container => {
+
+                //
+                // moving debris and background objects
+                container.obj.y += BACKGROUND_OBJECT_SPEED * dt - (parallaxMultiplier * PARALLAX_SPEED * dt)
+                if (container.obj.y > renderer.size.y + container.obj.height/2) {
+                    toDestroy.push(container)
+                }
+
+                //
+                // test debris for collision with spaceship
+                if (container.type === SPAWN_TYPE.DEBRIS) {
+
                 }
             })
 
-            toDestroy.forEach(object => {
-                backgroundObjects.splice(backgroundObjects.indexOf(object), 1)
-                renderer.removeObject(object, RENDERER_LAYER.BACKGROUND)
-                object.destroy()
+            toDestroy.forEach(container => {
+                objects.splice(objects.indexOf(container), 1)
+                renderer.removeObject(container.obj, RENDERER_LAYER.BACKGROUND)
+                container.obj.destroy()
             })
         }
     }

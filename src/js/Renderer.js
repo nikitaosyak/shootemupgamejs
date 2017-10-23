@@ -1,5 +1,5 @@
 
-export const RENDERER_LAYER = {BACKGROUND: 'background', PLAYER: 'player'}
+export const RENDERER_LAYER = {BACKGROUND: 'background', PLAYER: 'player', DEBRIS: 'debris'}
 
 export const Renderer = (canvasElement) => {
 
@@ -8,13 +8,16 @@ export const Renderer = (canvasElement) => {
     const stage = new PIXI.Container()
     const backgroundLayer = new PIXI.Container()
     const playerLayer = new PIXI.Container()
+    const debris = new PIXI.Container()
 
     stage.addChild(backgroundLayer)
     stage.addChild(playerLayer)
+    stage.addChild(debris)
 
     const layerMapping = {}
     layerMapping[RENDERER_LAYER.BACKGROUND] = backgroundLayer
     layerMapping[RENDERER_LAYER.PLAYER] = playerLayer
+    layerMapping[RENDERER_LAYER.DEBRIS] = debris
 
     const pixiRenderer = PIXI.autoDetectRenderer({
         width: virtualSize.x,

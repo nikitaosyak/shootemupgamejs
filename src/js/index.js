@@ -34,6 +34,7 @@ window.onload = () => {
 
     resources
         .add('spaceship', 'assets/spaceship_mockup.png')
+        .add('asteroid', 'assets/asteroid_mockup.png')
         .add('star', 'assets/star.png')
         .load(() => {
             startGame()
