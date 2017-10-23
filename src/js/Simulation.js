@@ -1,7 +1,8 @@
 import {RENDERER_LAYER} from "./Renderer";
 export const Simulation = (renderer, spawner, input) => {
 
-    const BACKGROUND_OBJECT_SPEED = 80
+    const SPACESHIP_SPEED = 200
+    const BACKGROUND_OBJECT_SPEED = 100
     const PARALLAX_SPEED = 25
 
     const backgroundObjects = []
@@ -14,20 +15,39 @@ export const Simulation = (renderer, spawner, input) => {
     renderer.addObject(spaceship, RENDERER_LAYER.PLAYER)
 
     let parallaxMultiplier = 0
+    let currentAcceleration = {x: 0, y: 0}
 
-    input.on('accelerate', (direction) => {
-        spaceship.x += direction.x * 10
-        spaceship.y += direction.y * 10
+    input.on('accelerate', (accelerationVector) => {
 
-        if (Math.abs(direction.y) > 0) {
-            parallaxMultiplier = direction.y
-        } else if (direction.x === 0 && direction.y === 0) {
-            parallaxMultiplier = 0
+        if ('x' in accelerationVector) {
+            currentAcceleration.x = accelerationVector.x
+        }
+
+        if ('y' in accelerationVector) {
+            currentAcceleration.y = accelerationVector.y
+            parallaxMultiplier = accelerationVector.y
         }
     })
 
     return {
         update: (dt) => {
+
+            spaceship.x += currentAcceleration.x * SPACESHIP_SPEED * dt
+            spaceship.y += currentAcceleration.y * SPACESHIP_SPEED * dt
+
+            if (spaceship.y < renderer.size.y/2) {
+                spaceship.y = renderer.size.y/2
+            }
+            if (spaceship.y > renderer.size.y - spaceship.height/2) {
+                spaceship.y = renderer.size.y - spaceship.height/2
+            }
+
+            if (spaceship.x < 0) {
+                spaceship.x = renderer.size.x
+            }
+            if (spaceship.x > renderer.size.x) {
+                spaceship.x = 0
+            }
 
             spawner.update()
             if (spawner.canSpawn) {
