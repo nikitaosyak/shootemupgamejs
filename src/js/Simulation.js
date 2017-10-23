@@ -1,5 +1,6 @@
 import {RENDERER_LAYER} from "./Renderer";
 import {SPAWN_TYPE} from "./LevelSpawner";
+import {Util} from "./util/Util";
 export const Simulation = (renderer, spawner, input) => {
 
     const SPACESHIP_SPEED = 200
@@ -74,7 +75,16 @@ export const Simulation = (renderer, spawner, input) => {
                 //
                 // test debris for collision with spaceship
                 if (container.type === SPAWN_TYPE.DEBRIS) {
-
+                    const object = container.obj
+                    const hit = Util.testAABB(
+                        spaceship.x - spaceship.width/2, spaceship.x + spaceship.width/2,
+                        spaceship.y - spaceship.height/2, spaceship.y + spaceship.height/2,
+                        object.x - object.width/2, object.x + object.width/2,
+                        object.y - object.height/2, object.y + object.height/2
+                    )
+                    if (hit) {
+                        // console.log('hit detected')
+                    }
                 }
             })
 
