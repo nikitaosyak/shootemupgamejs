@@ -1,6 +1,9 @@
 import {RENDERER_LAYER} from "./Renderer";
 export const Simulation = (renderer, spawner, input) => {
 
+    const BACKGROUND_OBJECT_SPEED = 80
+    const PARALLAX_SPEED = 25
+
     const backgroundObjects = []
 
     const spaceship = new PIXI.Sprite(resources.getTexture('spaceship'))
@@ -10,21 +13,21 @@ export const Simulation = (renderer, spawner, input) => {
     spaceship.y = renderer.size.y - spaceship.height/2
     renderer.addObject(spaceship, RENDERER_LAYER.PLAYER)
 
-    let verticalSpeedBump = 0
+    let parallaxMultiplier = 0
 
     input.on('accelerate', (direction) => {
         spaceship.x += direction.x * 10
         spaceship.y += direction.y * 10
 
         if (Math.abs(direction.y) > 0) {
-            verticalSpeedBump = direction.y * 2
+            parallaxMultiplier = direction.y
         } else if (direction.x === 0 && direction.y === 0) {
-            verticalSpeedBump = 0
+            parallaxMultiplier = 0
         }
     })
 
     return {
-        update: () => {
+        update: (dt) => {
 
             spawner.update()
             if (spawner.canSpawn) {
@@ -35,7 +38,7 @@ export const Simulation = (renderer, spawner, input) => {
 
             const toDestroy = []
             backgroundObjects.forEach(object => {
-                object.y += 3 - verticalSpeedBump
+                object.y += BACKGROUND_OBJECT_SPEED * dt - (parallaxMultiplier * PARALLAX_SPEED * dt)
                 if (object.y > renderer.size.y + object.height/2) {
                     toDestroy.push(object)
                 }

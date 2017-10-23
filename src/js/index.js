@@ -18,9 +18,12 @@ window.onload = () => {
         const input = new Input()
         const simulation = Simulation(renderer, spawner, input)
 
+        let time = Date.now()
         const gameLoop = () => {
-
-            simulation.update()
+            const now = Date.now()
+            const dt = now - time
+            time = now
+            simulation.update(dt / 1000)
 
             renderer.update()
 
