@@ -4,17 +4,16 @@ import {Util} from "./util/Util";
 export const Simulation = (renderer, spawner, input) => {
 
     const SPACESHIP_SPEED = 200
-    const BACKGROUND_OBJECT_SPEED = 100
     const PARALLAX_SPEED = 25
 
     const objects = []
     const spawnTypeMapping = {}
-    spawnTypeMapping[SPAWN_TYPE.BACKGROUND] = {renderLayer: RENDERER_LAYER.BACKGROUND}
-    spawnTypeMapping[SPAWN_TYPE.DEBRIS] = {renderLayer: RENDERER_LAYER.DEBRIS}
-    spawnTypeMapping[SPAWN_TYPE.AI] = {renderLayer: RENDERER_LAYER.BACKGROUND}
+    spawnTypeMapping[SPAWN_TYPE.BACKGROUND] = {renderLayer: RENDERER_LAYER.BACKGROUND, speed: 100}
+    spawnTypeMapping[SPAWN_TYPE.DEBRIS] = {renderLayer: RENDERER_LAYER.DEBRIS, speed: 200}
+    spawnTypeMapping[SPAWN_TYPE.AI] = {renderLayer: RENDERER_LAYER.BACKGROUND, speed: 100}
 
     const spaceship = new PIXI.Sprite(resources.getTexture('spaceship'))
-    spaceship.width = spaceship.height = 256
+    spaceship.width = spaceship.height = 150
     spaceship.anchor.x = spaceship.anchor.y = 0.5
     spaceship.x = renderer.size.x/2
     spaceship.y = renderer.size.y - spaceship.height/2
@@ -67,7 +66,7 @@ export const Simulation = (renderer, spawner, input) => {
 
                 //
                 // moving debris and background objects
-                container.obj.y += BACKGROUND_OBJECT_SPEED * dt - (parallaxMultiplier * PARALLAX_SPEED * dt)
+                container.obj.y += spawnTypeMapping[container.type].speed * dt - (parallaxMultiplier * PARALLAX_SPEED * dt)
                 if (container.obj.y > renderer.size.y + container.obj.height/2) {
                     toDestroy.push(container)
                 }
