@@ -1,4 +1,7 @@
-import {AddGameObjectSpeed, ConstructGameObject} from "./GameObjectBase";
+import {
+    AddGameObjectSpeed, AddGameObjectType,
+    ConstructGameObject
+} from "./GameObjectBase";
 import {SPAWN_TYPE} from "../LevelSpawner";
 import {Util} from "../util/Util";
 
@@ -13,14 +16,18 @@ export const DebrisObject = () => {
     Object.assign(
         self,
         ConstructGameObject(
-            SPAWN_TYPE.DEBRIS,
-            'asteroid', 128, Util.getRandomInt(64, 736), tint
+            'asteroid', 128, Util.getRandomInt(64, 736), 0, tint
         )
     )
 
     Object.assign(
         self,
         AddGameObjectSpeed(speed)
+    )
+
+    Object.assign(
+        self,
+        AddGameObjectType(SPAWN_TYPE.DEBRIS)
     )
 
     return self

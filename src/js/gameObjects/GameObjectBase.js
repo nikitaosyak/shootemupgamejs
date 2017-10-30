@@ -1,15 +1,20 @@
 
 export const ConstructGameObject =
-    (type, texture, size, xPosition, tint = 0xFFFFFFFF) => {
+    (texture, size, x, y, tint = 0xFFFFFF) => {
     const sprite = new PIXI.Sprite(window.resources.getTexture(texture))
     sprite.width = sprite.height = size
-    sprite.anchor.x = sprite.anchor.x = 0.5
+    sprite.anchor.x = sprite.anchor.y = 0.5
+    sprite.x = x; sprite.y = y
     sprite.tint = tint
-    sprite.x = xPosition
 
     return {
-        get type() { return type },
         get visual() { return sprite }
+    }
+}
+
+export const AddGameObjectType = (type) => {
+    return {
+        get type() { return type }
     }
 }
 

@@ -1,9 +1,9 @@
 import {RENDERER_LAYER} from "./Renderer";
 import {SPAWN_TYPE} from "./LevelSpawner";
 import {Util} from "./util/Util";
+import {Spaceship} from "./gameObjects/Spaceship";
 export const Simulation = (renderer, spawner, input) => {
 
-    const SPACESHIP_SPEED = 200
     const PARALLAX_SPEED = 40
 
     const objects = []
@@ -12,12 +12,8 @@ export const Simulation = (renderer, spawner, input) => {
     spawnTypeToRenderLayer[SPAWN_TYPE.DEBRIS] = RENDERER_LAYER.DEBRIS
     spawnTypeToRenderLayer[SPAWN_TYPE.AI] = RENDERER_LAYER.BACKGROUND
 
-    const spaceship = new PIXI.Sprite(resources.getTexture('spaceship'))
-    spaceship.width = spaceship.height = 150
-    spaceship.anchor.x = spaceship.anchor.y = 0.5
-    spaceship.x = renderer.size.x/2
-    spaceship.y = renderer.size.y - spaceship.height/2
-    renderer.addObject(spaceship, RENDERER_LAYER.PLAYER)
+    const spaceship = Spaceship(renderer.size)
+    renderer.addObject(spaceship.visual, RENDERER_LAYER.PLAYER)
 
     let parallaxMultiplier = 0
     let currentAcceleration = {x: 0, y: 0}
@@ -36,22 +32,22 @@ export const Simulation = (renderer, spawner, input) => {
 
     return {
         update: (dt) => {
+            const pSprite = spaceship.visual
+            pSprite.x += currentAcceleration.x * spaceship.speed * dt
+            pSprite.y += currentAcceleration.y * spaceship.speed * dt
 
-            spaceship.x += currentAcceleration.x * SPACESHIP_SPEED * dt
-            spaceship.y += currentAcceleration.y * SPACESHIP_SPEED * dt
-
-            if (spaceship.y < renderer.size.y/2) {
-                spaceship.y = renderer.size.y/2
+            if (pSprite.y < renderer.size.y/2) {
+                pSprite.y = renderer.size.y/2
             }
-            if (spaceship.y > renderer.size.y - spaceship.height/2) {
-                spaceship.y = renderer.size.y - spaceship.height/2
+            if (pSprite.y > renderer.size.y - pSprite.height/2) {
+                pSprite.y = renderer.size.y - pSprite.height/2
             }
 
-            if (spaceship.x < 0) {
-                spaceship.x = renderer.size.x
+            if (pSprite.x < 0) {
+                pSprite.x = renderer.size.x
             }
-            if (spaceship.x > renderer.size.x) {
-                spaceship.x = 0
+            if (pSprite.x > renderer.size.x) {
+                pSprite.x = 0
             }
 
             spawner.update()
@@ -76,8 +72,8 @@ export const Simulation = (renderer, spawner, input) => {
                 // test debris for collision with spaceship
                 if (object.type === SPAWN_TYPE.DEBRIS) {
                     const hit = Util.testAABB(
-                        spaceship.x - spaceship.width/2, spaceship.x + spaceship.width/2,
-                        spaceship.y - spaceship.height/2, spaceship.y + spaceship.height/2,
+                        pSprite.x - pSprite.width/2, pSprite.x + pSprite.width/2,
+                        pSprite.y - pSprite.height/2, pSprite.y + pSprite.height/2,
                         sprite.x - sprite.width/2, sprite.x + sprite.width/2,
                         sprite.y - sprite.height/2, sprite.y + sprite.height/2
                     )
