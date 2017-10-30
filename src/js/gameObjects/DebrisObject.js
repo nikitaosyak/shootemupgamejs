@@ -7,16 +7,18 @@ import {Util} from "../util/Util";
 
 export const DebrisObject = () => {
 
-    const asteroidType = Util.getRandomInt(0, 2)
-    const speed = [100, 150, 200][asteroidType]
-    const tint = [0xCCCC00, 0xFFFFFF, 0xCC0000][asteroidType]
+    const size = 128
+    const debrisType = Util.getRandomInt(0, 2)
+    const speed = [120, 170, 220][debrisType]
+    const tint = [0xCCCC00, 0xFFFFFF, 0xCC0000][debrisType]
+    const scale = [1.0, 0.8, 0.6][debrisType]
 
     const self = {}
 
     Object.assign(
         self,
         AddVisual(
-            'asteroid', 128, Util.getRandomInt(64, 736), 0, tint
+            'asteroid', size * scale, Util.getRandomInt(64, 736), 0, tint
         )
     )
 
