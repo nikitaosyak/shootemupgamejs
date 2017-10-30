@@ -6,14 +6,25 @@ export const Simulation = (renderer, spawner, input) => {
 
     const PARALLAX_SPEED = 40
 
+    let spaceship = null
     const objects = []
     const spawnTypeToRenderLayer = {}
     spawnTypeToRenderLayer[SPAWN_TYPE.BACKGROUND] = RENDERER_LAYER.BACKGROUND
     spawnTypeToRenderLayer[SPAWN_TYPE.DEBRIS] = RENDERER_LAYER.DEBRIS
     spawnTypeToRenderLayer[SPAWN_TYPE.AI] = RENDERER_LAYER.BACKGROUND
+    spawnTypeToRenderLayer[RENDERER_LAYER.PLAYER] = RENDERER_LAYER.PLAYER
 
-    const spaceship = Spaceship(renderer.size)
-    renderer.addObject(spaceship.visual, RENDERER_LAYER.PLAYER)
+    const destroyObject = (object) => {
+        objects.splice(objects.indexOf(object), 1)
+        renderer.removeObject(object.visual, spawnTypeToRenderLayer[object.type])
+        object.visual.destroy()
+    }
+
+    const spawnShip = () => {
+        spaceship = Spaceship(renderer.size)
+        renderer.addObject(spaceship.visual, RENDERER_LAYER.PLAYER)
+    }
+    spawnShip()
 
     let parallaxMultiplier = 0
     let currentAcceleration = {x: 0, y: 0}
@@ -78,16 +89,18 @@ export const Simulation = (renderer, spawner, input) => {
                         sprite.y - sprite.height/2, sprite.y + sprite.height/2
                     )
                     if (hit) {
-                        // console.log('hit detected')
+                        destroyObject(object)
+                        spaceship.subtractHealth()
                     }
                 }
             })
 
-            toDestroy.forEach(object => {
-                objects.splice(objects.indexOf(object), 1)
-                renderer.removeObject(object.visual, spawnTypeToRenderLayer[object.type])
-                object.visual.destroy()
-            })
+            toDestroy.forEach(destroyObject)
+
+            if (spaceship.currentHealth === 0) {
+                destroyObject(spaceship)
+                spawnShip()
+            }
         }
     }
 }
