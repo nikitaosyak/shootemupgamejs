@@ -4,13 +4,13 @@ import {Util} from "./util/Util";
 export const Simulation = (renderer, spawner, input) => {
 
     const SPACESHIP_SPEED = 200
-    const PARALLAX_SPEED = 25
+    const PARALLAX_SPEED = 40
 
     const objects = []
-    const spawnTypeMapping = {}
-    spawnTypeMapping[SPAWN_TYPE.BACKGROUND] = {renderLayer: RENDERER_LAYER.BACKGROUND, speed: 100}
-    spawnTypeMapping[SPAWN_TYPE.DEBRIS] = {renderLayer: RENDERER_LAYER.DEBRIS, speed: 200}
-    spawnTypeMapping[SPAWN_TYPE.AI] = {renderLayer: RENDERER_LAYER.BACKGROUND, speed: 100}
+    const spawnTypeToRenderLayer = {}
+    spawnTypeToRenderLayer[SPAWN_TYPE.BACKGROUND] = RENDERER_LAYER.BACKGROUND
+    spawnTypeToRenderLayer[SPAWN_TYPE.DEBRIS] = RENDERER_LAYER.DEBRIS
+    spawnTypeToRenderLayer[SPAWN_TYPE.AI] = RENDERER_LAYER.BACKGROUND
 
     const spaceship = new PIXI.Sprite(resources.getTexture('spaceship'))
     spaceship.width = spaceship.height = 150
@@ -57,29 +57,29 @@ export const Simulation = (renderer, spawner, input) => {
             spawner.update()
             if (spawner.canSpawn) {
                 const newObject = spawner.spawn()
-                objects.push({obj: newObject, type: spawner.spawnType})
-                renderer.addObject(newObject, spawnTypeMapping[spawner.spawnType].renderLayer)
+                objects.push(newObject)
+                renderer.addObject(newObject.visual, spawnTypeToRenderLayer[newObject.type])
             }
 
             const toDestroy = []
-            objects.forEach(container => {
+            objects.forEach(object => {
 
+                const sprite = object.visual
                 //
                 // moving debris and background objects
-                container.obj.y += spawnTypeMapping[container.type].speed * dt - (parallaxMultiplier * PARALLAX_SPEED * dt)
-                if (container.obj.y > renderer.size.y + container.obj.height/2) {
-                    toDestroy.push(container)
+                sprite.y += object.speed * dt - (parallaxMultiplier * PARALLAX_SPEED * dt)
+                if (sprite.y > renderer.size.y + sprite.height/2) {
+                    toDestroy.push(object)
                 }
 
                 //
                 // test debris for collision with spaceship
-                if (container.type === SPAWN_TYPE.DEBRIS) {
-                    const object = container.obj
+                if (object.type === SPAWN_TYPE.DEBRIS) {
                     const hit = Util.testAABB(
                         spaceship.x - spaceship.width/2, spaceship.x + spaceship.width/2,
                         spaceship.y - spaceship.height/2, spaceship.y + spaceship.height/2,
-                        object.x - object.width/2, object.x + object.width/2,
-                        object.y - object.height/2, object.y + object.height/2
+                        sprite.x - sprite.width/2, sprite.x + sprite.width/2,
+                        sprite.y - sprite.height/2, sprite.y + sprite.height/2
                     )
                     if (hit) {
                         // console.log('hit detected')
@@ -87,10 +87,10 @@ export const Simulation = (renderer, spawner, input) => {
                 }
             })
 
-            toDestroy.forEach(container => {
-                objects.splice(objects.indexOf(container), 1)
-                renderer.removeObject(container.obj, RENDERER_LAYER.BACKGROUND)
-                container.obj.destroy()
+            toDestroy.forEach(object => {
+                objects.splice(objects.indexOf(object), 1)
+                renderer.removeObject(object.visual, spawnTypeToRenderLayer[object.type])
+                object.visual.destroy()
             })
         }
     }
