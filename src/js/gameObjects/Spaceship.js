@@ -1,23 +1,24 @@
 import {
-    AddGameObjectSpeed, AddGameObjectType,
-    ConstructGameObject
+    AddGameObjectSpeed, AddGameObjectType, AddHealthBar,
+    AddVisual
 } from "./GameObjectBase";
 import {RENDERER_LAYER} from "../Renderer";
 
 export const Spaceship = (rendererSize) => {
     const size = 150
-    let health = 3
+    const maxHealth = 5
+    let health = maxHealth
     const self = {
         get currentHealth() { return health },
         subtractHealth() {
             health -= 1
-            console.log('current health: ', health)
+            self.setHealthBarValue(health/maxHealth)
         }
     }
 
     Object.assign(
         self,
-        ConstructGameObject(
+        AddVisual(
             'spaceship', size, rendererSize.x/2, rendererSize.y - size/2
         )
     )
@@ -30,6 +31,11 @@ export const Spaceship = (rendererSize) => {
     Object.assign(
         self,
         AddGameObjectType(RENDERER_LAYER.PLAYER)
+    )
+
+    Object.assign(
+        self,
+        AddHealthBar(self.visual)
     )
 
     return self

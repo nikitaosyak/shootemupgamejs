@@ -1,6 +1,6 @@
 import {
     AddGameObjectSpeed, AddGameObjectType,
-    ConstructGameObject
+    AddVisual
 } from "./GameObjectBase";
 import {SPAWN_TYPE} from "../LevelSpawner";
 import {Util} from "../util/Util";
@@ -16,7 +16,7 @@ export const BackgroundObject = () => {
 
     Object.assign(
         self,
-        ConstructGameObject(
+        AddVisual(
             texture, 50 * scale, Util.getRandomInt(0, 800), 0
         )
     )

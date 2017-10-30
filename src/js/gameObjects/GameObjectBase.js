@@ -1,5 +1,5 @@
 
-export const ConstructGameObject =
+export const AddVisual =
     (texture, size, x, y, tint = 0xFFFFFF) => {
     const sprite = new PIXI.Sprite(window.resources.getTexture(texture))
     sprite.width = sprite.height = size
@@ -9,6 +9,30 @@ export const ConstructGameObject =
 
     return {
         get visual() { return sprite }
+    }
+}
+
+export const AddHealthBar = (parent) => {
+    const sprite = new PIXI.Sprite(window.resources.getTexture('pixel'))
+
+    sprite.width = parent.width/parent.scale.x * 0.9;
+    sprite.height = 10/parent.scale.y
+
+    sprite.x = -(parent.width/parent.scale.x)/2 + (parent.width/parent.scale.x)*0.05;
+    sprite.y = (parent.height/parent.scale.y)/2
+
+    sprite.anchor.x = 0; sprite.anchor.y = 1
+    sprite.tint = 0xCC0000
+    sprite.alpha = 0.7
+
+    parent.addChild(sprite)
+
+    const maxWidth = sprite.width
+
+    return {
+        setHealthBarValue(v) {
+            sprite.width = maxWidth * v
+        }
     }
 }
 
