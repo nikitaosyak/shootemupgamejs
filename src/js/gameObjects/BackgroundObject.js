@@ -2,8 +2,8 @@ import {
     AddGameObjectSpeed, AddGameObjectType,
     AddVisual
 } from "./GameObjectBase";
-import {SPAWN_TYPE} from "../LevelSpawner";
 import {Util} from "../util/Util";
+import {OBJECT_TYPE} from "../Constants";
 
 export const BackgroundObject = () => {
 
@@ -28,7 +28,7 @@ export const BackgroundObject = () => {
 
     Object.assign(
         self,
-        AddGameObjectType(SPAWN_TYPE.BACKGROUND)
+        AddGameObjectType(OBJECT_TYPE.BACKGROUND)
     )
 
     return self

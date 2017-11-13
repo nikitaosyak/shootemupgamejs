@@ -1,7 +1,7 @@
 import {Util} from "./util/Util";
 import {BackgroundObject} from "./gameObjects/BackgroundObject";
 import {DebrisObject} from "./gameObjects/DebrisObject";
-export const SPAWN_TYPE = {BACKGROUND: 'background', DEBRIS: 'debris', AI: 'ai', NONE: 'none'}
+import {OBJECT_TYPE} from "./Constants";
 
 export const LevelSpawner = () => {
 
@@ -9,23 +9,23 @@ export const LevelSpawner = () => {
 
     const rollFrequency = 500
     const typeFrequency = {}
-    typeFrequency[SPAWN_TYPE.BACKGROUND] = 400
-    typeFrequency[SPAWN_TYPE.DEBRIS] = 2000
-    typeFrequency[SPAWN_TYPE.AI] = 5000
+    typeFrequency[OBJECT_TYPE.BACKGROUND] = 400
+    typeFrequency[OBJECT_TYPE.DEBRIS] = 2000
+    typeFrequency[OBJECT_TYPE.AI] = 5000
 
     const typeToConstructor = {}
-    typeToConstructor[SPAWN_TYPE.BACKGROUND] = BackgroundObject
-    typeToConstructor[SPAWN_TYPE.DEBRIS] = DebrisObject
-    typeToConstructor[SPAWN_TYPE.AI] = BackgroundObject
+    typeToConstructor[OBJECT_TYPE.BACKGROUND] = BackgroundObject
+    typeToConstructor[OBJECT_TYPE.DEBRIS] = DebrisObject
+    typeToConstructor[OBJECT_TYPE.AI] = BackgroundObject
 
     let lastSpawn = 0
     const lastTypedSpawn = {}
-    lastTypedSpawn[SPAWN_TYPE.BACKGROUND] = 0
-    lastTypedSpawn[SPAWN_TYPE.DEBRIS] = 0
-    lastTypedSpawn[SPAWN_TYPE.AI] = 0
+    lastTypedSpawn[OBJECT_TYPE.BACKGROUND] = 0
+    lastTypedSpawn[OBJECT_TYPE.DEBRIS] = 0
+    lastTypedSpawn[OBJECT_TYPE.AI] = 0
 
     let canSpawn = false
-    let nextSpawnType = SPAWN_TYPE.NONE
+    let nextSpawnType = OBJECT_TYPE.NONE
 
     return {
         update() {

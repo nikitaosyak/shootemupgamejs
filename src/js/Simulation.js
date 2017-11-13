@@ -1,28 +1,22 @@
-import {RENDERER_LAYER} from "./Renderer";
-import {SPAWN_TYPE} from "./LevelSpawner";
 import {Util} from "./util/Util";
 import {Spaceship} from "./gameObjects/Spaceship";
+import {OBJECT_TYPE} from "./Constants";
 export const Simulation = (renderer, spawner, input) => {
 
     const PARALLAX_SPEED = 40
 
     let spaceship = null
     const objects = []
-    const spawnTypeToRenderLayer = {}
-    spawnTypeToRenderLayer[SPAWN_TYPE.BACKGROUND] = RENDERER_LAYER.BACKGROUND
-    spawnTypeToRenderLayer[SPAWN_TYPE.DEBRIS] = RENDERER_LAYER.DEBRIS
-    spawnTypeToRenderLayer[SPAWN_TYPE.AI] = RENDERER_LAYER.BACKGROUND
-    spawnTypeToRenderLayer[RENDERER_LAYER.PLAYER] = RENDERER_LAYER.PLAYER
 
     const destroyObject = (object) => {
         objects.splice(objects.indexOf(object), 1)
-        renderer.removeObject(object.visual, spawnTypeToRenderLayer[object.type])
+        renderer.removeObject(object.visual, object.type)
         object.visual.destroy()
     }
 
     const spawnShip = () => {
         spaceship = Spaceship(renderer.size)
-        renderer.addObject(spaceship.visual, RENDERER_LAYER.PLAYER)
+        renderer.addObject(spaceship.visual, OBJECT_TYPE.PLAYER)
     }
     spawnShip()
 
@@ -65,7 +59,7 @@ export const Simulation = (renderer, spawner, input) => {
             if (spawner.canSpawn) {
                 const newObject = spawner.spawn()
                 objects.push(newObject)
-                renderer.addObject(newObject.visual, spawnTypeToRenderLayer[newObject.type])
+                renderer.addObject(newObject.visual, newObject.type)
             }
 
             const toDestroy = []
@@ -81,7 +75,7 @@ export const Simulation = (renderer, spawner, input) => {
 
                 //
                 // test debris for collision with spaceship
-                if (object.type === SPAWN_TYPE.DEBRIS) {
+                if (object.type === OBJECT_TYPE.DEBRIS) {
                     const hit = Util.testAABB(
                         pSprite.x - pSprite.width/2, pSprite.x + pSprite.width/2,
                         pSprite.y - pSprite.height/2, pSprite.y + pSprite.height/2,

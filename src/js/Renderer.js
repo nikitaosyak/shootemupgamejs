@@ -1,6 +1,4 @@
-
-export const RENDERER_LAYER = {BACKGROUND: 'background', PLAYER: 'player', DEBRIS: 'debris'}
-
+import {OBJECT_TYPE} from "./Constants";
 export const Renderer = (canvasElement) => {
 
     const virtualSize = {x: 800, y: 1280}
@@ -15,9 +13,9 @@ export const Renderer = (canvasElement) => {
     stage.addChild(debris)
 
     const layerMapping = {}
-    layerMapping[RENDERER_LAYER.BACKGROUND] = backgroundLayer
-    layerMapping[RENDERER_LAYER.PLAYER] = playerLayer
-    layerMapping[RENDERER_LAYER.DEBRIS] = debris
+    layerMapping[OBJECT_TYPE.BACKGROUND] = backgroundLayer
+    layerMapping[OBJECT_TYPE.PLAYER] = playerLayer
+    layerMapping[OBJECT_TYPE.DEBRIS] = debris
 
     const pixiRenderer = PIXI.autoDetectRenderer({
         width: virtualSize.x,

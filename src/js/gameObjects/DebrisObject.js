@@ -2,8 +2,8 @@ import {
     AddGameObjectSpeed, AddGameObjectType,
     AddVisual
 } from "./GameObjectBase";
-import {SPAWN_TYPE} from "../LevelSpawner";
 import {Util} from "../util/Util";
+import {OBJECT_TYPE} from "../Constants";
 
 export const DebrisObject = () => {
 
@@ -29,7 +29,7 @@ export const DebrisObject = () => {
 
     Object.assign(
         self,
-        AddGameObjectType(SPAWN_TYPE.DEBRIS)
+        AddGameObjectType(OBJECT_TYPE.DEBRIS)
     )
 
     return self

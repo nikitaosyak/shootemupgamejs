@@ -1,4 +1,4 @@
-import {Renderer, RENDERER_LAYER} from "./Renderer";
+import {Renderer} from "./Renderer";
 import {Resources} from "./util/Resources";
 import {Input} from "./Input";
 import {LevelSpawner} from "./LevelSpawner";

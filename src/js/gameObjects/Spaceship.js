@@ -2,7 +2,7 @@ import {
     AddGameObjectSpeed, AddGameObjectType, AddHealthBar,
     AddVisual
 } from "./GameObjectBase";
-import {RENDERER_LAYER} from "../Renderer";
+import {OBJECT_TYPE} from "../Constants"
 
 export const Spaceship = (rendererSize) => {
     const size = 150
@@ -30,7 +30,7 @@ export const Spaceship = (rendererSize) => {
 
     Object.assign(
         self,
-        AddGameObjectType(RENDERER_LAYER.PLAYER)
+        AddGameObjectType(OBJECT_TYPE.PLAYER)
     )
 
     Object.assign(
