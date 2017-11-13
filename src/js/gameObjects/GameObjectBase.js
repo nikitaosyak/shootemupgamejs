@@ -1,9 +1,10 @@
 
 export const AddVisual =
-    (texture, size, x, y, tint = 0xFFFFFF) => {
+    (texture, size, x, y, tint = 0xFFFFFF, anchorX = 0.5, anchorY = 0.5) => {
     const sprite = new PIXI.Sprite(window.resources.getTexture(texture))
     sprite.width = sprite.height = size
-    sprite.anchor.x = sprite.anchor.y = 0.5
+    sprite.anchor.x = anchorX
+    sprite.anchor.y = anchorY
     sprite.x = x; sprite.y = y
     sprite.tint = tint
 

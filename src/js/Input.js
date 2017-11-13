@@ -21,6 +21,10 @@ export const Input = (canvasElement) => {
         if (e.key === 's') { // backward
             self.emit('accelerate', {y: 1})
         }
+
+        if (e.key === ' ') {
+            self.emit('shoot', true)
+        }
     }
 
     window.onkeyup = (e) => {
@@ -52,6 +56,10 @@ export const Input = (canvasElement) => {
             } else {
                 self.emit('accelerate', {y: 0})
             }
+        }
+
+        if (e.key === ' ') {
+            self.emit('shoot', false)
         }
     }
 

@@ -16,6 +16,7 @@ export const Renderer = (canvasElement) => {
     layerMapping[OBJECT_TYPE.BACKGROUND] = backgroundLayer
     layerMapping[OBJECT_TYPE.PLAYER] = playerLayer
     layerMapping[OBJECT_TYPE.DEBRIS] = debris
+    layerMapping[OBJECT_TYPE.BULLET] = backgroundLayer
 
     const pixiRenderer = PIXI.autoDetectRenderer({
         width: virtualSize.x,

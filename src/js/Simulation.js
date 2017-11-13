@@ -1,17 +1,30 @@
 import {Util} from "./util/Util";
 import {Spaceship} from "./gameObjects/Spaceship";
 import {OBJECT_TYPE} from "./Constants";
+import {Bullet} from "./gameObjects/Bullet";
 export const Simulation = (renderer, spawner, input) => {
 
     const PARALLAX_SPEED = 40
 
     let spaceship = null
     const objects = []
+    const bullets = []
+
+    const createObject = (object) => {
+        objects.push(object)
+        renderer.addObject(object.visual, object.type)
+        if (object.type === OBJECT_TYPE.BULLET) {
+            bullets.push(object)
+        }
+    }
 
     const destroyObject = (object) => {
         objects.splice(objects.indexOf(object), 1)
         renderer.removeObject(object.visual, object.type)
         object.visual.destroy()
+        if (object.type === OBJECT_TYPE.BULLET) {
+            bullets.splice(bullets.indexOf(object), 1)
+        }
     }
 
     const spawnShip = () => {
@@ -33,6 +46,14 @@ export const Simulation = (renderer, spawner, input) => {
             currentAcceleration.y = accelerationVector.y
             parallaxMultiplier = accelerationVector.y
         }
+    })
+
+    input.on('shoot', toggle => {
+        if (toggle) {
+            const vis = spaceship.visual
+            createObject(Bullet(vis.x, vis.y - vis.height/2 - 20, -200))
+        }
+
     })
 
     return {
@@ -57,9 +78,7 @@ export const Simulation = (renderer, spawner, input) => {
 
             spawner.update()
             if (spawner.canSpawn) {
-                const newObject = spawner.spawn()
-                objects.push(newObject)
-                renderer.addObject(newObject.visual, newObject.type)
+                createObject(spawner.spawn())
             }
 
             const toDestroy = []
@@ -69,19 +88,38 @@ export const Simulation = (renderer, spawner, input) => {
                 //
                 // moving debris and background objects
                 sprite.y += object.speed * dt - (parallaxMultiplier * PARALLAX_SPEED * dt)
+
+                if (object.type === OBJECT_TYPE.BULLET) {
+                    if (sprite.y < -sprite.height) {
+                        toDestroy.push(object)
+                    }
+                }
                 if (sprite.y > renderer.size.y + sprite.height/2) {
                     toDestroy.push(object)
                 }
 
                 //
-                // test debris for collision with spaceship
+                // collision detection
                 if (object.type === OBJECT_TYPE.DEBRIS) {
-                    const hit = Util.testAABB(
+                    const hit = Util.AABBvAABB(
                         pSprite.x - pSprite.width/2, pSprite.x + pSprite.width/2,
                         pSprite.y - pSprite.height/2, pSprite.y + pSprite.height/2,
                         sprite.x - sprite.width/2, sprite.x + sprite.width/2,
                         sprite.y - sprite.height/2, sprite.y + sprite.height/2
                     )
+
+                    bullets.forEach(bullet => {
+                        const bulletHit = Util.pointVAABB(
+                            bullet.visual.x, bullet.visual.y,
+                            sprite.x - sprite.width/2, sprite.x + sprite.width/2,
+                            sprite.y - sprite.height/2, sprite.y + sprite.height/2
+                        )
+                        if (bulletHit) {
+                            toDestroy.push(object)
+                            toDestroy.push(bullet)
+                        }
+                    })
+
                     if (hit) {
                         toDestroy.push(object)
                         spaceship.subtractHealth()
