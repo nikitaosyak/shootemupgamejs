@@ -89,7 +89,7 @@ export const Simulation = (renderer, spawner, input) => {
                         sprite.y - sprite.height/2, sprite.y + sprite.height/2
                     )
                     if (hit) {
-                        destroyObject(object)
+                        toDestroy.push(object)
                         spaceship.subtractHealth()
                     }
                 }
