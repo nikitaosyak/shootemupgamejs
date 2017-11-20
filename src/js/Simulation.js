@@ -1,21 +1,19 @@
 import {Util} from "./util/Util";
-import {Spaceship} from "./gameObjects/Spaceship";
 import {OBJECT_TYPE} from "./Constants";
-import {Bullet} from "./gameObjects/Bullet";
+import {Spaceship} from "./gameObjects/Spaceship";
+import {BulletManager} from "./BulletManager";
 export const Simulation = (renderer, spawner, input) => {
 
     const PARALLAX_SPEED = 40
 
     let spaceship = null
     const objects = []
-    const bullets = []
+    const bulletMan = BulletManager()
 
-    const createObject = (object) => {
+    const addToSimulation = (object) => {
         objects.push(object)
         renderer.addObject(object.visual, object.type)
-        if (object.type === OBJECT_TYPE.BULLET) {
-            bullets.push(object)
-        }
+        bulletMan.addIfPossible(object)
     }
 
     const destroyObject = (object) => {
@@ -25,9 +23,7 @@ export const Simulation = (renderer, spawner, input) => {
         }
         renderer.removeObject(object.visual, object.type)
         object.visual.destroy()
-        if (object.type === OBJECT_TYPE.BULLET) {
-            bullets.splice(bullets.indexOf(object), 1)
-        }
+        bulletMan.removeIfPossible(object)
     }
 
     const spawnShip = () => {
@@ -54,9 +50,11 @@ export const Simulation = (renderer, spawner, input) => {
     input.on('shoot', toggle => {
         if (toggle) {
             const vis = spaceship.visual
-            createObject(Bullet(vis.x, vis.y - vis.height/2 - 20, -200))
+            bulletMan.playerStartShooting()
+            // addToSimulation(bulletMan.spawn())
+        } else {
+            bulletMan.playerStopShooting()
         }
-
     })
 
     return {
@@ -81,7 +79,11 @@ export const Simulation = (renderer, spawner, input) => {
 
             spawner.update()
             if (spawner.canSpawn) {
-                createObject(spawner.spawn())
+                addToSimulation(spawner.spawn())
+            }
+
+            if (bulletMan.pending) {
+                addToSimulation(bulletMan.spawn(pSprite.x, pSprite.y - pSprite.height/2 - 20))
             }
 
             const toDestroy = []
@@ -111,7 +113,7 @@ export const Simulation = (renderer, spawner, input) => {
                         sprite.y - sprite.height/2, sprite.y + sprite.height/2
                     )
 
-                    bullets.forEach(bullet => {
+                    bulletMan.iterate(bullet => {
                         const bulletHit = Util.pointVAABB(
                             bullet.visual.x, bullet.visual.y,
                             sprite.x - sprite.width/2, sprite.x + sprite.width/2,
