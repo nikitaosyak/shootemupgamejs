@@ -19,7 +19,10 @@ export const Simulation = (renderer, spawner, input) => {
     }
 
     const destroyObject = (object) => {
-        objects.splice(objects.indexOf(object), 1)
+        const objIndex = objects.indexOf(object)
+        if (objIndex > -1) {
+            objects.splice(objIndex, 1)
+        }
         renderer.removeObject(object.visual, object.type)
         object.visual.destroy()
         if (object.type === OBJECT_TYPE.BULLET) {

@@ -18,8 +18,8 @@ export const Util = {
 
         return overlapX && overlapY
     },
-    pointVAABB: (x, y, ax1, ay1, ax2, ay2) => {
-        const threshold = 0
+    pointVAABB: (x, y, ax1, ax2, ay1, ay2) => {
+        const threshold = 10
         const xOverlap = x - ax1 > threshold && ax2 - x > threshold
         const yOverlap = y - ay1 > threshold && ay2 - y > threshold
         return xOverlap && yOverlap
