@@ -49,9 +49,7 @@ export const Simulation = (renderer, spawner, input) => {
 
     input.on('shoot', toggle => {
         if (toggle) {
-            const vis = spaceship.visual
             bulletMan.playerStartShooting()
-            // addToSimulation(bulletMan.spawn())
         } else {
             bulletMan.playerStopShooting()
         }
@@ -128,6 +126,20 @@ export const Simulation = (renderer, spawner, input) => {
                     if (hit) {
                         toDestroy.push(object)
                         spaceship.subtractHealth()
+                    }
+                }
+
+                if (object.type === OBJECT_TYPE.HEALTH_PICKUP) {
+                    const hit = Util.AABBvAABB(
+                        pSprite.x - pSprite.width/2, pSprite.x + pSprite.width/2,
+                        pSprite.y - pSprite.height/2, pSprite.y + pSprite.height/2,
+                        sprite.x - sprite.width/2, sprite.x + sprite.width/2,
+                        sprite.y - sprite.height/2, sprite.y + sprite.height/2
+                    )
+
+                    if (hit) {
+                        toDestroy.push(object)
+                        spaceship.fillHealth()
                     }
                 }
             })

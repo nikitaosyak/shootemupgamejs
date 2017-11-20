@@ -13,6 +13,10 @@ export const Spaceship = (rendererSize) => {
         subtractHealth() {
             health -= 1
             self.setHealthBarValue(health/maxHealth)
+        },
+        fillHealth() {
+            health = maxHealth
+            self.setHealthBarValue(health/maxHealth)
         }
     }
 

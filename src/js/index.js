@@ -39,6 +39,7 @@ window.onload = () => {
         .add('star2', 'assets/star2.png')
         .add('pixel', 'assets/pixel.png')
         .add('bluebeam', 'assets/bluebeam.png')
+        .add('health', 'assets/health.png')
         .load(() => {
             startGame()
         })

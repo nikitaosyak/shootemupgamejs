@@ -2,27 +2,29 @@ import {Util} from "./util/Util";
 import {BackgroundObject} from "./gameObjects/BackgroundObject";
 import {DebrisObject} from "./gameObjects/DebrisObject";
 import {OBJECT_TYPE} from "./Constants";
+import {HealthPickup} from "./gameObjects/HealthPickup";
 
 export const LevelSpawner = () => {
-
-    const resources = window.resources
 
     const rollFrequency = 500
     const typeFrequency = {}
     typeFrequency[OBJECT_TYPE.BACKGROUND] = 400
     typeFrequency[OBJECT_TYPE.DEBRIS] = 2000
     typeFrequency[OBJECT_TYPE.AI] = 5000
+    typeFrequency[OBJECT_TYPE.HEALTH_PICKUP] = 40000
 
     const typeToConstructor = {}
     typeToConstructor[OBJECT_TYPE.BACKGROUND] = BackgroundObject
     typeToConstructor[OBJECT_TYPE.DEBRIS] = DebrisObject
     typeToConstructor[OBJECT_TYPE.AI] = BackgroundObject
+    typeToConstructor[OBJECT_TYPE.HEALTH_PICKUP] = HealthPickup
 
     let lastSpawn = 0
     const lastTypedSpawn = {}
     lastTypedSpawn[OBJECT_TYPE.BACKGROUND] = 0
     lastTypedSpawn[OBJECT_TYPE.DEBRIS] = 0
     lastTypedSpawn[OBJECT_TYPE.AI] = 0
+    lastTypedSpawn[OBJECT_TYPE.HEALTH_PICKUP] = Date.now()
 
     let canSpawn = false
     let nextSpawnType = OBJECT_TYPE.NONE
