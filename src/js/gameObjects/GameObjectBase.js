@@ -1,4 +1,7 @@
 
+import {PARALLAX_SPEED} from "../Constants";
+import {Util} from "../util/Util";
+
 export const AddVisual =
     (texture, size, x, y, tint = 0xFFFFFF, anchorX = 0.5, anchorY = 0.5) => {
     const sprite = new PIXI.Sprite(window.resources.getTexture(texture))
@@ -46,5 +49,38 @@ export const AddGameObjectType = (type) => {
 export const AddGameObjectSpeed = (speed) => {
     return {
         get speed() { return speed }
+    }
+}
+
+export const GOBase = {
+    moveConstant: (sprite, speed, dt, pMult) => {
+        sprite.y += speed * dt - (pMult * PARALLAX_SPEED * dt)
+    },
+    eraseFromBottom: (self, rendererSize, destroyQueue) => {
+        if (self.visual.y < rendererSize.y + self.visual.height/2) return
+        destroyQueue.push(self)
+    },
+    eraseFromTop: (self, destroyQueue) => {
+        if (self.visual.y > -self.visual.height) return
+        destroyQueue.push(self)
+    },
+    isHit: (sprite1, sprite2) => {
+        return Util.AABBvAABB(
+            sprite1.x - sprite1.width/2, sprite1.x + sprite1.width/2,
+            sprite1.y - sprite1.height/2, sprite1.y + sprite1.height/2,
+            sprite2.x - sprite2.width/2, sprite2.x + sprite2.width/2,
+            sprite2.y - sprite2.height/2, sprite2.y + sprite2.height/2
+        )
+    },
+    checkBulletHit: (sprite, bulletMan, destroyQueue, onBulletHit) => {
+        bulletMan.iterate(bullet => {
+            const hit = Util.pointVAABB(bullet.visual.x, bullet.visual.y,
+                sprite.x - sprite.width/2, sprite.x + sprite.width/2,
+                sprite.y - sprite.height/2, sprite.y + sprite.height/2)
+            if (hit) {
+                destroyQueue.push(bullet)
+                onBulletHit()
+            }
+        })
     }
 }

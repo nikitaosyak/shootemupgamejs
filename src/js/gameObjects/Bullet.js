@@ -1,11 +1,17 @@
 import {
     AddGameObjectSpeed, AddGameObjectType,
-    AddVisual
+    AddVisual, GOBase
 } from "./GameObjectBase";
 import {OBJECT_TYPE} from "../Constants";
 export const Bullet = (x, y, speed) => {
 
-    const self = {}
+    const self = {
+        update: (dt, pMult, destroyQueue, player, bulletMan, renderer) => {
+            GOBase.moveConstant(self.visual, self.speed, dt, pMult)
+            GOBase.eraseFromBottom(self, renderer.size, destroyQueue)
+            GOBase.eraseFromTop(self, destroyQueue)
+        }
+    }
 
     Object.assign(
         self,

@@ -17,6 +17,24 @@ export const Spaceship = (rendererSize) => {
         fillHealth() {
             health = maxHealth
             self.setHealthBarValue(health/maxHealth)
+        },
+        update(dt, currentAcceleration, rendererSize) {
+            self.visual.x += currentAcceleration.x * self.speed * dt
+            self.visual.y += currentAcceleration.y * self.speed * dt
+
+            if (self.visual.y < rendererSize.y/2) {
+                self.visual.y = rendererSize.y/2
+            }
+            if (self.visual.y > rendererSize.y - self.visual.height/2) {
+                self.visual.y = rendererSize.y - self.visual.height/2
+            }
+
+            if (self.visual.x < 0) {
+                self.visual.x = rendererSize.x
+            }
+            if (self.visual.x > rendererSize.x) {
+                self.visual.x = 0
+            }
         }
     }
 

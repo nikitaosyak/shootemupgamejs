@@ -1,6 +1,6 @@
 import {
     AddGameObjectSpeed, AddGameObjectType,
-    AddVisual
+    AddVisual, GOBase
 } from "./GameObjectBase";
 import {Util} from "../util/Util";
 import {OBJECT_TYPE} from "../Constants";
@@ -12,7 +12,12 @@ export const BackgroundObject = () => {
     const scale = [0.5, 0.7, 0.9][parallaxLevel]
     const texture = ['star', 'star2'][Util.getRandomInt(0, 1)]
 
-    const self = {}
+    const self = {
+        update: (dt, pMult, destroyQueue, player, bulletMan, renderer) => {
+            GOBase.moveConstant(self.visual, self.speed, dt, pMult)
+            GOBase.eraseFromBottom(self, renderer.size, destroyQueue)
+        }
+    }
 
     Object.assign(
         self,

@@ -1,6 +1,6 @@
 import {
     AddGameObjectSpeed, AddGameObjectType,
-    AddVisual
+    AddVisual, GOBase
 } from "./GameObjectBase";
 import {Util} from "../util/Util";
 import {OBJECT_TYPE} from "../Constants";
@@ -13,7 +13,20 @@ export const DebrisObject = () => {
     const tint = [0xCCCC00, 0xFFFFFF, 0xCC0000][debrisType]
     const scale = [1.0, 0.8, 0.6][debrisType]
 
-    const self = {}
+    const self = {
+        update: (dt, pMult, destroyQueue, player, bulletMan, renderer) => {
+            GOBase.moveConstant(self.visual, self.speed, dt, pMult)
+            GOBase.eraseFromBottom(self, renderer.size, destroyQueue)
+
+            if (GOBase.isHit(player.visual, self.visual)) {
+                destroyQueue.push(self)
+                player.subtractHealth()
+            }
+
+            GOBase.checkBulletHit(self.visual, bulletMan,
+                destroyQueue, () => destroyQueue.push(self))
+        }
+    }
 
     Object.assign(
         self,
