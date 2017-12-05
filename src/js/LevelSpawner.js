@@ -3,20 +3,21 @@ import {BackgroundObject} from "./gameObjects/BackgroundObject";
 import {DebrisObject} from "./gameObjects/DebrisObject";
 import {OBJECT_TYPE} from "./Constants";
 import {HealthPickup} from "./gameObjects/HealthPickup";
+import {Enemy} from "./gameObjects/Enemy";
 
 export const LevelSpawner = () => {
 
     const rollFrequency = 500
     const typeFrequency = {}
     typeFrequency[OBJECT_TYPE.BACKGROUND] = 400
-    typeFrequency[OBJECT_TYPE.DEBRIS] = 2000
+    typeFrequency[OBJECT_TYPE.DEBRIS] = 5000
     typeFrequency[OBJECT_TYPE.AI] = 5000
     typeFrequency[OBJECT_TYPE.HEALTH_PICKUP] = 40000
 
     const typeToConstructor = {}
     typeToConstructor[OBJECT_TYPE.BACKGROUND] = BackgroundObject
     typeToConstructor[OBJECT_TYPE.DEBRIS] = DebrisObject
-    typeToConstructor[OBJECT_TYPE.AI] = BackgroundObject
+    typeToConstructor[OBJECT_TYPE.AI] = Enemy
     typeToConstructor[OBJECT_TYPE.HEALTH_PICKUP] = HealthPickup
 
     let lastSpawn = 0

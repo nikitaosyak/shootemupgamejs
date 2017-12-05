@@ -1,6 +1,6 @@
 import {
     AddGameObjectSpeed, AddGameObjectType, AddHealthBar,
-    AddVisual
+    AddVisual, GOBase
 } from "./GameObjectBase";
 import {OBJECT_TYPE} from "../Constants"
 
@@ -10,15 +10,15 @@ export const Spaceship = (rendererSize) => {
     let health = maxHealth
     const self = {
         get currentHealth() { return health },
-        subtractHealth() {
-            health -= 1
+        subtractHealth(value = 1) {
+            health -= value
             self.setHealthBarValue(health/maxHealth)
         },
         fillHealth() {
             health = maxHealth
             self.setHealthBarValue(health/maxHealth)
         },
-        update(dt, currentAcceleration, rendererSize) {
+        update(dt, currentAcceleration, rendererSize, destroyQueue, bulletMan) {
             self.visual.x += currentAcceleration.x * self.speed * dt
             self.visual.y += currentAcceleration.y * self.speed * dt
 
@@ -35,6 +35,10 @@ export const Spaceship = (rendererSize) => {
             if (self.visual.x > rendererSize.x) {
                 self.visual.x = 0
             }
+
+            GOBase.checkBulletHit(self.visual, bulletMan, destroyQueue, () => {
+                self.subtractHealth()
+            })
         }
     }
 

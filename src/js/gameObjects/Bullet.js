@@ -3,7 +3,7 @@ import {
     AddVisual, GOBase
 } from "./GameObjectBase";
 import {OBJECT_TYPE} from "../Constants";
-export const Bullet = (x, y, speed) => {
+export const Bullet = (x, y, texture, speed) => {
 
     const self = {
         update: (dt, pMult, destroyQueue, player, bulletMan, renderer) => {
@@ -15,7 +15,7 @@ export const Bullet = (x, y, speed) => {
 
     Object.assign(
         self,
-        AddVisual('bluebeam', 30, x, y, 0xFFFFFF, 0.5, speed > 0 ? 1: 0)
+        AddVisual(texture, 30, x, y, 0xFFFFFF, 0.5, speed > 0 ? 1: 0)
     )
 
     Object.assign(

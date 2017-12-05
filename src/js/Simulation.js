@@ -46,7 +46,7 @@ export const Simulation = (renderer, spawner, input) => {
 
     input.on('shoot', toggle => {
         if (toggle) {
-            bulletMan.playerStartShooting()
+            bulletMan.playerStartShooting(spaceship.visual)
         } else {
             bulletMan.playerStopShooting()
         }
@@ -54,26 +54,26 @@ export const Simulation = (renderer, spawner, input) => {
 
     return {
         update: (dt) => {
-            const pSprite = spaceship.visual
-            spaceship.update(dt, currentAcceleration, renderer.size)
+            const toDestroy = []
+            spaceship.update(dt, currentAcceleration, renderer.size, toDestroy, bulletMan)
 
             spawner.update()
             if (spawner.canSpawn) {
                 addToSimulation(spawner.spawn())
             }
 
-            if (bulletMan.pending) {
-                addToSimulation(bulletMan.spawn(pSprite.x, pSprite.y - pSprite.height/2 - 20))
+            bulletMan.update(spaceship.visual)
+            while (bulletMan.pending) {
+                addToSimulation(bulletMan.spawnNext())
             }
 
-            const toDestroy = []
             objects.forEach(object => object.update(
                 dt, parallaxMultiplier, toDestroy, spaceship, bulletMan, renderer
             ))
 
             toDestroy.forEach(destroyObject)
 
-            if (spaceship.currentHealth === 0) {
+            if (spaceship.currentHealth <= 0) {
                 destroyObject(spaceship)
                 spawnShip()
             }

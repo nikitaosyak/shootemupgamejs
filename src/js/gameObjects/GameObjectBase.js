@@ -35,7 +35,7 @@ export const AddHealthBar = (parent) => {
 
     return {
         setHealthBarValue(v) {
-            sprite.width = maxWidth * v
+            sprite.width = Math.max(0, maxWidth * v)
         }
     }
 }

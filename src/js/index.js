@@ -40,6 +40,9 @@ window.onload = () => {
         .add('pixel', 'assets/pixel.png')
         .add('bluebeam', 'assets/bluebeam.png')
         .add('health', 'assets/health.png')
+        .add('enemy1', 'assets/enemy1.png')
+        .add('enemy2', 'assets/enemy2.png')
+        .add('redbeam', 'assets/redbeam.png')
         .load(() => {
             startGame()
         })
