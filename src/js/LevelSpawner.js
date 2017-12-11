@@ -3,7 +3,7 @@ import {BackgroundObject} from "./gameObjects/BackgroundObject";
 import {DebrisObject} from "./gameObjects/DebrisObject";
 import {OBJECT_TYPE} from "./Constants";
 import {HealthPickup} from "./gameObjects/HealthPickup";
-import {Enemy} from "./gameObjects/Enemy";
+import {Enemy} from "./gameObjects/ai/Enemy";
 
 export const LevelSpawner = () => {
 

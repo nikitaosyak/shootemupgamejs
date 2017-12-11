@@ -1,18 +1,21 @@
 import {
     AddGameObjectType, AddHealthBar, AddVisual,
     GOBase
-} from "./GameObjectBase";
-import {Util} from "../util/Util";
-import {OBJECT_TYPE} from "../Constants";
+} from "../GameObjectBase";
+import {Util} from "../../util/Util";
+import {OBJECT_TYPE} from "../../Constants";
+import {MoveChase, MoveLinear, MoveZigZag} from "./EnemyBehaviours";
 
 export const Enemy = () => {
 
-    const enemyType = Util.getRandomInt(0, 1)
-    const fireRate = [2000, 1000][enemyType]
-    const maxHealth = [4, 2][enemyType]
-    const speed = [60, 100][enemyType]
-    const damageOnHullHit = [2, 1][enemyType]
-    const texture = ['enemy1', 'enemy2'][enemyType]
+    const enemySize = Util.getRandomInt(0, 1)
+    const fireRate = [2000, 1000][enemySize]
+    const maxHealth = [4, 2][enemySize]
+    const speed = [60, 100][enemySize]
+    const damageOnHullHit = [2, 1][enemySize]
+    const texture = ['enemy1', 'enemy2'][enemySize]
+
+    const moveBehaviour = [MoveLinear, MoveZigZag, MoveChase][Util.getRandomInt(0, 2)](speed)
 
     let health = maxHealth
     let lastShot = Date.now()
@@ -31,7 +34,8 @@ export const Enemy = () => {
                 lastShot = now
             }
 
-            GOBase.moveConstant(self.visual, speed, dt, pMult)
+            // GOBase.moveConstant(self.visual, speed, dt, pMult)
+            moveBehaviour.update(self, dt, pMult, renderer, player)
             GOBase.eraseFromBottom(self, renderer.size, destroyQueue)
 
             if (GOBase.isHit(player.visual, self.visual)) {
