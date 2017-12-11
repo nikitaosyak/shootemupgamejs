@@ -37,14 +37,73 @@ export const MoveChase = (speed) => {
 }
 
 
-export const ShootConstantly = () => {
-
+export const ShootConstantly = (enemySize, bulletSpeed) => {
+    const fireRate = [2000, 1000][enemySize]
+    let lastShot = Date.now()
+    return {
+        update(self, bulletMan, _) {
+            const now = Date.now()
+            if (now - lastShot > fireRate) {
+                bulletMan.addPending(
+                    self.visual.x, self.visual.y + self.visual.height/2 + 20,
+                    bulletSpeed, 'redbeam'
+                )
+                lastShot = now
+            }
+        }
+    }
 }
 
-export const ShootPeriodically = () => {
+export const ShootPeriodically = (enemySize, bulletSpeed) => {
+    const burstCount = [4, 3][enemySize]
+    const shortCooldown = [400, 300][enemySize]
+    const largeCooldown = [3000, 2000][enemySize]
+    let lastShot = Date.now()
+    let cooldownActive = false
+    let currentBullet = 0
 
+    return {
+        update(self, bulletMan, _) {
+            const now = Date.now()
+            if (cooldownActive) {
+                if (now - lastShot > largeCooldown) cooldownActive = false
+            } else {
+                if (now - lastShot > shortCooldown) {
+                    bulletMan.addPending(
+                        self.visual.x, self.visual.y + self.visual.height/2 + 20,
+                        bulletSpeed, 'redbeam'
+                    )
+                    lastShot = now
+                    currentBullet++
+
+                    if (currentBullet >= burstCount) {
+                        cooldownActive = true
+                        currentBullet = 0
+                    }
+                }
+            }
+        }
+    }
 }
 
-export const ShootOnSight = () => {
+export const ShootOnSight = (enemySize, bulletSpeed) => {
+    const fireRate = [1500, 800][enemySize]
+    const boundaries = 50
+    let lastShot = Date.now()
 
+    return {
+        update(self, bulletMan, player) {
+            let canShoot = Math.abs(self.visual.x - player.visual.x) < boundaries
+            if (!canShoot) return
+
+            const now = Date.now()
+            if (now - lastShot > fireRate) {
+                bulletMan.addPending(
+                    self.visual.x, self.visual.y + self.visual.height/2 + 20,
+                    bulletSpeed, 'redbeam'
+                )
+                lastShot = now
+            }
+        }
+    }
 }
