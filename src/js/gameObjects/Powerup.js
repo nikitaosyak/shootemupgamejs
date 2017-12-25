@@ -32,7 +32,5 @@ export const Powerup = () => {
 
     Object.assign(self, AddGameObjectType(OBJECT_TYPE.POWERUP))
 
-    console.log(self)
-
     return self
 }

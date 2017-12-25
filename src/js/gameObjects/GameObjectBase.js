@@ -40,6 +40,30 @@ export const AddHealthBar = (parent) => {
     }
 }
 
+export const AddCooldownBar = (parent) => {
+    const sprite = new PIXI.Sprite(window.resources.getTexture('pixel'))
+
+    sprite.width = parent.width/parent.scale.x * 0.9;
+    sprite.height = 10/parent.scale.y/4
+
+    sprite.x = -(parent.width/parent.scale.x)/2 + (parent.width/parent.scale.x)*0.05;
+    sprite.y = (parent.height/parent.scale.y)/2
+
+    sprite.anchor.x = 0; sprite.anchor.y = 1
+    sprite.tint = 0x0000CC
+    sprite.alpha = 0.7
+
+    parent.addChild(sprite)
+
+    const maxWidth = sprite.width
+
+    return {
+        setCooldownBarValue(v) {
+            sprite.width = Math.max(0, maxWidth * v)
+        }
+    }
+}
+
 export const AddGameObjectType = (type) => {
     return {
         get type() { return type }

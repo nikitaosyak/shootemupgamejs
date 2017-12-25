@@ -53,6 +53,15 @@ export const Simulation = (renderer, spawner, input) => {
         }
     })
 
+    input.on('shootWarhead', () => {
+        if (spaceship.canFireWarhead) {
+            console.log('will fire warhead')
+            spaceship.resetWarheadCooldown()
+        } else {
+            console.log('cannot fire warhead')
+        }
+    })
+
     return {
         update: (dt) => {
             const toDestroy = []

@@ -61,6 +61,10 @@ export const Input = (canvasElement) => {
         if (e.key === ' ') {
             self.emit('shoot', false)
         }
+
+        if (e.key === 'r') {
+            self.emit('shootWarhead')
+        }
     }
 
     return self
