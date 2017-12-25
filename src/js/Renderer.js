@@ -17,7 +17,7 @@ export const Renderer = (canvasElement) => {
     layerMapping[OBJECT_TYPE.PLAYER] = playerLayer
     layerMapping[OBJECT_TYPE.DEBRIS] = debris
     layerMapping[OBJECT_TYPE.BULLET] = backgroundLayer
-    layerMapping[OBJECT_TYPE.HEALTH_PICKUP] = backgroundLayer
+    layerMapping[OBJECT_TYPE.POWERUP] = backgroundLayer
     layerMapping[OBJECT_TYPE.AI] = playerLayer
 
     const pixiRenderer = PIXI.autoDetectRenderer({

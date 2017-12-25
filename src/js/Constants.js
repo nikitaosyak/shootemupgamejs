@@ -5,7 +5,7 @@ export const OBJECT_TYPE = {
     BULLET: 'bullet',
     AI: 'ai',
     PLAYER: 'player',
-    HEALTH_PICKUP: 'healthPickup',
+    POWERUP: 'powerup',
     NONE: 'none'
 }
 

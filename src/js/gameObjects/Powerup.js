@@ -5,7 +5,12 @@ import {
 import {Util} from "../util/Util";
 import {OBJECT_TYPE} from "../Constants";
 
-export const HealthPickup = () => {
+export const Powerup = () => {
+
+    const idx = Util.getRandomInt(0, 3)
+    const sprite = ['health', 'pixel', 'pixel', 'pixel'][idx]
+    const tint = [0xFFFFFF, 0x0000CC, 0x00CC00, 0xCC0000][idx]
+    const action = ['fillHealth', 'addHealth', 'addSpeed', 'addShootingSpeed'][idx]
 
     const self = {
         update: (dt, pMult, destroyQueue, player, bulletMan, renderer) => {
@@ -13,19 +18,21 @@ export const HealthPickup = () => {
             GOBase.eraseFromBottom(self, renderer.size, destroyQueue)
 
             if (GOBase.isHit(player.visual, self.visual)) {
-                player.fillHealth()
+                player[action]()
                 destroyQueue.push(self)
             }
         }
     }
 
     Object.assign(self,
-        AddVisual('health', 64, Util.getRandomInt(32, 768), 0)
+        AddVisual(sprite, 64, Util.getRandomInt(32, 768), 0, tint)
     )
 
     Object.assign(self, AddGameObjectSpeed(100))
 
-    Object.assign(self, AddGameObjectType(OBJECT_TYPE.HEALTH_PICKUP))
+    Object.assign(self, AddGameObjectType(OBJECT_TYPE.POWERUP))
+
+    console.log(self)
 
     return self
 }

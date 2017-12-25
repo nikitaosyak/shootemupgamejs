@@ -2,18 +2,20 @@ import {OBJECT_TYPE} from "./Constants";
 import {Bullet} from "./gameObjects/Bullet";
 export const BulletManager = () => {
 
-    const COOLDOWN = 350
+    let player
     let lastShotTime = Date.now()
     let playerWantsToShoot = false
     const pending = []
     const bullets = []
 
     const self = {
-        update: (playerSprite) => {
+        injectPlayer : (value) => { player = value },
+        update: () => {
             const now = Date.now()
-            if (playerWantsToShoot && now - lastShotTime > COOLDOWN) {
-                // console.log(now - lastShotTime)
-                pending.push({x: playerSprite.x, y: playerSprite.y - playerSprite.height/2 - 20,
+            if (playerWantsToShoot && now - lastShotTime > player.shootingCooldown) {
+                pending.push({
+                    x: player.visual.x,
+                    y: player.visual.y - player.visual.height/2 - 20,
                     texture: 'bluebeam', speed: -270})
                 lastShotTime = now
             }
@@ -24,9 +26,9 @@ export const BulletManager = () => {
         addPending: (x, y, speed, texture) => {
             pending.push({x: x, y: y, texture: texture, speed: speed})
         },
-        playerStartShooting: (playerSprite) => {
+        playerStartShooting: () => {
             playerWantsToShoot = true
-            self.update(playerSprite)
+            self.update()
         },
         playerStopShooting: () => {
             playerWantsToShoot = false

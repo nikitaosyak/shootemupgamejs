@@ -25,6 +25,7 @@ export const Simulation = (renderer, spawner, input) => {
 
     const spawnShip = () => {
         spaceship = Spaceship(renderer.size)
+        bulletMan.injectPlayer(spaceship)
         renderer.addObject(spaceship.visual, OBJECT_TYPE.PLAYER)
     }
     spawnShip()
@@ -46,7 +47,7 @@ export const Simulation = (renderer, spawner, input) => {
 
     input.on('shoot', toggle => {
         if (toggle) {
-            bulletMan.playerStartShooting(spaceship.visual)
+            bulletMan.playerStartShooting(spaceship.visual, spaceship.shootingCooldown)
         } else {
             bulletMan.playerStopShooting()
         }

@@ -2,7 +2,7 @@ import {Util} from "./util/Util";
 import {BackgroundObject} from "./gameObjects/BackgroundObject";
 import {DebrisObject} from "./gameObjects/DebrisObject";
 import {OBJECT_TYPE} from "./Constants";
-import {HealthPickup} from "./gameObjects/HealthPickup";
+import {Powerup} from "./gameObjects/Powerup";
 import {Enemy} from "./gameObjects/ai/Enemy";
 
 export const LevelSpawner = () => {
@@ -12,20 +12,20 @@ export const LevelSpawner = () => {
     typeFrequency[OBJECT_TYPE.BACKGROUND] = 400
     typeFrequency[OBJECT_TYPE.DEBRIS] = 5000
     typeFrequency[OBJECT_TYPE.AI] = 5000
-    typeFrequency[OBJECT_TYPE.HEALTH_PICKUP] = 40000
+    typeFrequency[OBJECT_TYPE.POWERUP] = 10000
 
     const typeToConstructor = {}
     typeToConstructor[OBJECT_TYPE.BACKGROUND] = BackgroundObject
     typeToConstructor[OBJECT_TYPE.DEBRIS] = DebrisObject
     typeToConstructor[OBJECT_TYPE.AI] = Enemy
-    typeToConstructor[OBJECT_TYPE.HEALTH_PICKUP] = HealthPickup
+    typeToConstructor[OBJECT_TYPE.POWERUP] = Powerup
 
     let lastSpawn = 0
     const lastTypedSpawn = {}
     lastTypedSpawn[OBJECT_TYPE.BACKGROUND] = 0
     lastTypedSpawn[OBJECT_TYPE.DEBRIS] = 0
     lastTypedSpawn[OBJECT_TYPE.AI] = 0
-    lastTypedSpawn[OBJECT_TYPE.HEALTH_PICKUP] = Date.now()
+    lastTypedSpawn[OBJECT_TYPE.POWERUP] = Date.now()
 
     let canSpawn = false
     let nextSpawnType = OBJECT_TYPE.NONE

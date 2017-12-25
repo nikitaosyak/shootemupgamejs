@@ -6,10 +6,16 @@ import {OBJECT_TYPE} from "../Constants"
 
 export const Spaceship = (rendererSize) => {
     const size = 150
-    const maxHealth = 5
+
+    let shootingCooldown = 500
+    let speed = 100
+    let maxHealth = 5
     let health = maxHealth
+
     const self = {
+        get speed() { return speed },
         get currentHealth() { return health },
+        get shootingCooldown() { return shootingCooldown },
         subtractHealth(value = 1) {
             health -= value
             self.setHealthBarValue(health/maxHealth)
@@ -17,6 +23,16 @@ export const Spaceship = (rendererSize) => {
         fillHealth() {
             health = maxHealth
             self.setHealthBarValue(health/maxHealth)
+        },
+        addHealth() {
+            maxHealth += 1
+            self.fillHealth()
+        },
+        addSpeed() {
+            speed = Math.min(300, speed + 50)
+        },
+        addShootingSpeed() {
+            shootingCooldown = Math.max(200, shootingCooldown - 30)
         },
         update(dt, currentAcceleration, rendererSize, destroyQueue, bulletMan) {
             self.visual.x += currentAcceleration.x * self.speed * dt
@@ -47,11 +63,6 @@ export const Spaceship = (rendererSize) => {
         AddVisual(
             'spaceship', size, rendererSize.x/2, rendererSize.y - size/2
         )
-    )
-
-    Object.assign(
-        self,
-        AddGameObjectSpeed(200)
     )
 
     Object.assign(
