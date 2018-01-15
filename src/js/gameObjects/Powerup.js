@@ -8,8 +8,8 @@ import {OBJECT_TYPE} from "../Constants";
 export const Powerup = () => {
 
     const idx = Util.getRandomInt(0, 3)
-    const sprite = ['health', 'pixel', 'pixel', 'pixel'][idx]
-    const tint = [0xFFFFFF, 0x0000CC, 0x00CC00, 0xCC0000][idx]
+    const sprite = ['health', 'shield', 'speedRocket', 'shooting'][idx]
+    const tint = [0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF][idx]
     const action = ['fillHealth', 'addHealth', 'addSpeed', 'addShootingSpeed'][idx]
 
     const self = {

@@ -43,6 +43,10 @@ window.onload = () => {
         .add('enemy1', 'assets/enemy1.png')
         .add('enemy2', 'assets/enemy2.png')
         .add('redbeam', 'assets/redbeam.png')
+        .add('rocket', 'assets/rocket.png')
+        .add('shield', 'assets/shield.png')
+        .add('shooting', 'assets/shooting.png')
+        .add('speedRocket', 'assets/speedRocket.png')
         .load(() => {
             startGame()
         })
