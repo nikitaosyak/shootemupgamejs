@@ -23,6 +23,14 @@ export const DebrisObject = () => {
                 player.subtractHealth()
             }
 
+            if (player.warhead) {
+                if (GOBase.isHit(player.warhead.visual, self.visual)) {
+                    destroyQueue.push(self)
+                    destroyQueue.push(player.warhead)
+                    player.warhead = null
+                }
+            }
+
             GOBase.checkBulletHit(self.visual, bulletMan,
                 destroyQueue, () => destroyQueue.push(self))
         }

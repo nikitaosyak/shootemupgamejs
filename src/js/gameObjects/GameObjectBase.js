@@ -85,8 +85,9 @@ export const GOBase = {
         destroyQueue.push(self)
     },
     eraseFromTop: (self, destroyQueue) => {
-        if (self.visual.y > -self.visual.height) return
+        if (self.visual.y > -self.visual.height) return false
         destroyQueue.push(self)
+        return true
     },
     isHit: (sprite1, sprite2) => {
         return Util.AABBvAABB(

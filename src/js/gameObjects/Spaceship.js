@@ -15,6 +15,7 @@ export const Spaceship = (rendererSize) => {
     let health = maxHealth
 
     const self = {
+        warhead: null,
         get speed() { return speed },
         get currentHealth() { return health },
         get shootingCooldown() { return shootingCooldown },

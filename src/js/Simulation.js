@@ -1,6 +1,7 @@
 import {OBJECT_TYPE} from "./Constants";
 import {Spaceship} from "./gameObjects/Spaceship";
 import {BulletManager} from "./BulletManager";
+import {Warhead} from "./gameObjects/Warhead";
 export const Simulation = (renderer, spawner, input) => {
 
     let spaceship = null
@@ -57,6 +58,8 @@ export const Simulation = (renderer, spawner, input) => {
         if (spaceship.canFireWarhead) {
             console.log('will fire warhead')
             spaceship.resetWarheadCooldown()
+            spaceship.warhead = Warhead(spaceship.visual.x, spaceship.visual.y)
+            addToSimulation(spaceship.warhead)
         } else {
             console.log('cannot fire warhead')
         }

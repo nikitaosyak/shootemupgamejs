@@ -6,6 +6,7 @@ export const OBJECT_TYPE = {
     AI: 'ai',
     PLAYER: 'player',
     POWERUP: 'powerup',
+    WARHEAD: 'warhead',
     NONE: 'none'
 }
 
